@@ -16,8 +16,17 @@ def main():
     spatialRef = m.spatialReference
 
     tif_folder = r"C:\Users\jcberkey\Documents\ArcGIS\Projects\DOTROW_JACK_GEOREF\TempTIFFsForAutomation"
+    
+    pdf_folder = os.path.dirname(pdf_path)
+    parent_folder = os.path.dirname(pdf_folder)
+   
+    project_relative = os.path.relpath(parent_folder, r"Z:\PROJECTS\DOT_ROW\Plat Database\SE") 
+    folder_code = project_relative.replace(os.sep, "_")
+    
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
-    tif_path = os.path.join(tif_folder, f"{pdf_name}.tif")
+    tif_name = f"{pdf_name}__FOLDER__{folder_code}.tif"
+
+    tif_path = os.path.join(tif_folder, tif_name)
    
     arcpy.conversion.PDFToTIFF(
         in_pdf_file=pdf_path,
