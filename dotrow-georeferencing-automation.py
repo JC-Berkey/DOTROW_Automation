@@ -26,6 +26,7 @@ def main():
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
     tif_name = f"{pdf_name}__FOLDER__{folder_code}.tif"
 
+    os.makedirs(tif_path, exist_ok=True)
     tif_path = os.path.join(tif_folder, tif_name)
    
     arcpy.conversion.PDFToTIFF(
