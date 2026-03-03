@@ -1,6 +1,7 @@
 import arcpy
 import os
 
+# This class is purely for creating the dropdown selection for the active layers
 class ToolValidator(object):
 
     def __init__(self):
@@ -39,14 +40,13 @@ def main():
 
     project_base = r"Z:\PROJECTS\DOT_ROW\Plat Database\SE"
     tiff_folder_path = os.path.join(project_base, *folder_parts, "TIFF")
+
+    #The TIFF folder should always exist so this shouldnt run. Just a catch case.
     os.makedirs(tiff_folder_path, exist_ok=True)
 
     full_path = os.path.join(tiff_folder_path, pdf_name + ".tif")
 
-    arcpy.AddMessage(f"Temp tif path: {tif_path}")
-    arcpy.AddMessage(f"Export folder path: {tiff_folder_path}")
-    arcpy.AddMessage(f"Final export path: {full_path}")
-
+    # Copies the georeferenced tif to the TIFF folder using the cerated full path
     arcpy.management.CopyRaster(tif_path, full_path)
 
 
