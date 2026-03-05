@@ -1,5 +1,6 @@
 import arcpy
 import os
+import json
 
 # This class is purely for creating the dropdown selection for the active layers
 class ToolValidator(object):
@@ -31,7 +32,16 @@ def main():
         return
 
     layer = arcpy.GetParameter(0)
-    pdf_path = layer.dataSource
+    data_source = layer.dataSource
+
+    data_source = layer.dataSource
+
+    if "GDAL_JSON:" in data_source:
+        json_part = data_source.split("GDAL_JSON:")[1]
+        gdal_dict = json.loads(json_part)
+        pdf_path = gdal_dict["filename"]
+    else:
+        pdf_path = data_source
 
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
 
@@ -40,13 +50,10 @@ def main():
 
     tiff_folder_path = os.path.join(pdf_folder_dir, "TIFF")
 
-    #The TIFF folder should always exist so this shouldnt run. Just a catch case.
-    os.makedirs(tiff_folder_path, exist_ok=True)
-
     full_path = os.path.join(tiff_folder_path, pdf_name + ".tif")
 
     # Copies the georeferenced tif to the TIFF folder using the cerated full path
-    arcpy.management.CopyRaster(pdf_path, full_path)
+    arcpy.management.CopyRaster(layer, full_path)
 
 
 if __name__ == "__main__":
